@@ -26,12 +26,13 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { isUserAdmin } from "@/utils/roleUtils";
 
 const AdminBlogCreate = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -50,14 +51,8 @@ const AdminBlogCreate = () => {
     const checkAdminStatus = async () => {
       try {
         setLoading(true);
-        const { data } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user?.id)
-          .eq('role', 'admin')
-          .maybeSingle();
-        
-        setIsAdmin(!!data);
+        const isAdmin = await isUserAdmin();
+        setIsAdmin(isAdmin);
       } catch (error) {
         console.error("Error checking admin status:", error);
       } finally {
