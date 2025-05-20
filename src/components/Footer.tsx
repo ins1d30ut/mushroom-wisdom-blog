@@ -65,12 +65,13 @@ const Footer = () => {
             © {new Date().getFullYear()} MyceliMind. All rights reserved.
           </p>
           <div className="flex gap-4 mt-4 md:mt-0">
-            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-forest-700">
+            {/* Replace Link components with regular anchor tags for these links since they're not yet implemented */}
+            <a href="#" className="text-sm text-muted-foreground hover:text-forest-700">
               Privacy Policy
-            </Link>
-            <Link to="/terms" className="text-sm text-muted-foreground hover:text-forest-700">
+            </a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-forest-700">
               Terms of Service
-            </Link>
+            </a>
           </div>
         </div>
       </div>

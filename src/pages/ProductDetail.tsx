@@ -8,6 +8,7 @@ import {
   AccordionItem, 
   AccordionTrigger 
 } from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
 import { getProductBySlug, products } from "@/data/productData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
