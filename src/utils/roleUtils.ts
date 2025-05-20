@@ -7,10 +7,18 @@ import { supabase } from "@/integrations/supabase/client";
  */
 export const isUserAdmin = async (): Promise<boolean> => {
   try {
+    // First get the session asynchronously
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData.session?.user.id;
+    
+    // If no user ID, return false
+    if (!userId) return false;
+    
+    // Query user roles with the retrieved user ID
     const { data } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', supabase.auth.getSession().then(({ data }) => data.session?.user.id))
+      .eq('user_id', userId)
       .eq('role', 'admin')
       .maybeSingle();
     
