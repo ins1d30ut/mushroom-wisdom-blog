@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,10 +8,14 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { LogOut, Menu, User } from "lucide-react";
+import { useAuth } from "@/components/AuthProvider";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   // Handle scroll effect
   if (typeof window !== "undefined") {
@@ -26,6 +30,20 @@ const Navbar = () => {
     { name: "Products", path: "/products" },
     { name: "About", path: "/about" },
   ];
+  
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Signed out successfully");
+    navigate("/");
+  };
+
+  const handleAuthClick = () => {
+    if (user) {
+      handleSignOut();
+    } else {
+      navigate("/auth");
+    }
+  };
 
   return (
     <nav
@@ -54,7 +72,23 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <Button>Shop Now</Button>
+          
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground">
+                {user.email}
+              </span>
+              <Button onClick={handleSignOut} variant="outline" size="sm">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <Button onClick={() => navigate("/auth")}>
+              <User className="h-4 w-4 mr-2" />
+              Sign In
+            </Button>
+          )}
         </div>
 
         {/* Mobile Navigation */}
@@ -75,7 +109,23 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <Button className="mt-4 w-full">Shop Now</Button>
+              
+              <Button 
+                className="mt-4 w-full" 
+                onClick={handleAuthClick}
+              >
+                {user ? (
+                  <>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </>
+                ) : (
+                  <>
+                    <User className="h-4 w-4 mr-2" />
+                    Sign In
+                  </>
+                )}
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
