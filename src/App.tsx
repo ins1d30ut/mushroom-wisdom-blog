@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import Index from "./pages/Index";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -13,6 +15,7 @@ import ProductDetail from "./pages/ProductDetail";
 import About from "./pages/About";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import AdminBlogCreate from "./pages/AdminBlogCreate";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +34,14 @@ const App = () => (
             <Route path="/products/:slug" element={<ProductDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/auth" element={<Auth />} />
+            <Route 
+              path="/admin/blog/create" 
+              element={
+                <AdminProtectedRoute>
+                  <AdminBlogCreate />
+                </AdminProtectedRoute>
+              } 
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
